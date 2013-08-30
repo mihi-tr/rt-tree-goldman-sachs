@@ -44,7 +44,7 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 +
 ")");
 
-d3.json("flare.json", function(error, root) {
+d3.json("http://opencorporates.com/companies/gb/02611945/network.json", function(error, root) {
   var nodes = tree.nodes(root),
       links = tree.links(nodes);
 
