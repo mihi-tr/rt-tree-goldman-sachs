@@ -23,7 +23,7 @@
 </style>
 </head>
 <body>
-<script src="js/vendor/d3.v3.js"></script>
+<script src="js/vendor/d3.v3.min.js"></script>
 <script src="js/vendor/underscore-min.js"></script>
 <script>
 
@@ -38,13 +38,27 @@ var diagonal = d3.svg.diagonal.radial()
     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
 
 var svg = d3.select("body").append("svg")
-    .attr("width", diameter)
-    .attr("height", diameter - 150)
+    .attr("width", diameter +150 )
+    .attr("height", diameter + 150)
   .append("g")
     .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 +
 ")");
 
-d3.json("http://opencorporates.com/companies/gb/02611945/network.json", function(error, root) {
+
+d3.json("network.json", function(error, root) {
+   
+  var getChildren = function(r,parent) {
+    c=_.filter(r,function(x) {return x.parent_name == parent}) 
+    if (c.length) {
+      return ({"name":parent,
+        children: _.map(c,function(x) {return (getChildren(r,x.child_name))})})
+      }
+    else {
+      return ({"name":parent })
+    }
+  }
+  root=getChildren(root,"GOLDMAN SACHS HOLDINGS (U.K.)")
+  console.log(root);
   var nodes = tree.nodes(root),
       links = tree.links(nodes);
 
